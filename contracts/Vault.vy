@@ -796,7 +796,7 @@ def _calculateLockedProfit() -> uint256:
         return lockedProfit - (
                 precisionFactor
                 * lockedFundsRatio
-                * self.lockedProfit
+                * lockedProfit
                 / DEGREDATION_COEFFICIENT
                 / precisionFactor
             )

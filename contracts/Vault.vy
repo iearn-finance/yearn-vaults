@@ -978,7 +978,9 @@ def _reportLoss(strategy: address, loss: uint256):
     # Also, make sure we reduce our trust with the strategy by the same amount
     debtRatio: uint256 = self.strategies[strategy].debtRatio
     precisionFactor: uint256 = self.precisionFactor
-    ratio_change: uint256 = min(precisionFactor * loss * MAX_BPS / self._totalAssets() / precisionFactor, debtRatio)
+    ratio_change: uint256 = debtRatio
+    if self._totalAssets() > 0:
+        ratio_change = min(precisionFactor * loss * MAX_BPS / self._totalAssets() / precisionFactor, ratio_change)
     self.strategies[strategy].debtRatio -= ratio_change
     self.debtRatio -= ratio_change
 

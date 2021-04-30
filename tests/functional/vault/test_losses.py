@@ -58,3 +58,21 @@ def test_losses(chain, vault, strategy, gov, token):
     params = vault.strategies(strategy).dict()
     assert params["totalLoss"] == 500
     assert params["totalDebt"] == 0
+
+
+def test_total_loss(chain, vault, strategy, gov, token):
+    vault.addStrategy(strategy, 10_000, 0, 2 ** 256 - 1, 1_000, {"from": gov})
+    token.approve(vault, 2 ** 256 - 1, {"from": gov})
+    vault.deposit(5000, {"from": gov})
+
+    strategy.harvest({"from": gov})
+    assert token.balanceOf(strategy) == 5000
+
+    # send all our tokens back to the token contract
+    token.transfer(token, token.balanceOf(strategy), {"from": strategy})
+
+    strategy.harvest({"from": gov})
+    params = vault.strategies(strategy)
+    assert params["totalLoss"] == 5000
+    assert params["totalDebt"] == 0
+    assert params["debtRatio"] == 0

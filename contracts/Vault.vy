@@ -263,7 +263,7 @@ def initialize(
         If `nameOverride` is not specified, the name will be 'yearn'
         combined with the name of `token`.
 
-        If `symbolOverride` is not specified, the symbol will be 'y'
+        If `symbolOverride` is not specified, the symbol will be 'yv'
         combined with the symbol of `token`.
     @param token The token that may be deposited into this Vault.
     @param governance The address authorized for governance interactions.
@@ -797,7 +797,7 @@ def _issueSharesForAmount(to: address, amount: uint256) -> uint256:
     # calculation will be wrong. This means that only *trusted* tokens
     # (with no capability for exploitative behavior) can be used.
     shares: uint256 = 0
-    # HACK: Saves 2 SLOADs (~4000 gas)
+    # HACK: Saves 2 SLOADs (~200 gas, post-Berlin)
     totalSupply: uint256 = self.totalSupply
     if totalSupply > 0:
         # Mint amount of shares based on what the Vault is managing overall

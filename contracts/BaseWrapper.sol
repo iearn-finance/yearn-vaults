@@ -253,7 +253,7 @@ abstract contract BaseWrapper {
 
         // If we have extra, deposit back into `_bestVault` for `sender`
         // NOTE: Invariant is `withdrawn <= amount`
-        if (withdrawn > amount) {
+        if (withdrawn > amount && amount > _bestVault.pricePerShare().div(10**_bestVault.decimals())) {
             // Don't forget to approve the deposit
             if (token.allowance(address(this), address(_bestVault)) < withdrawn.sub(amount)) {
                 token.safeApprove(address(_bestVault), UNLIMITED_APPROVAL); // Vaults are trusted
